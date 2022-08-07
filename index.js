@@ -1,15 +1,24 @@
-const express = require('express');
+"use strict";
+
+import express from "express";
+import dotenv from "dotenv";
+
+import { dbRouter } from "./routes/dbRouter.js";
+
+dotenv.config();
+
 const app = express();
-const port = 3001;
+const PORT = process.env.PORT || 3001;
 
-app.set('port', port);
-app.get('/', (req, res) => {
-    res.send("Hello");
-    //res.status(200).json({ success: true, message: "Success" });
+app.use("/", (req, res) => {
+  res.send("Hi Hello");
+});
+app.use((req, res) => {
+  res.status(404).send("Page Not Found");
 });
 
-app.listen(port, () => {
-    console.log('Example app listening on port 3001');
-});
+app.use("/db", dbRouter);
 
-module.exports = app;
+app.listen(PORT, "0.0.0.0", () =>
+  console.log(`Server running on port http://localhost:${PORT}`)
+);
